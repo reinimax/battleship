@@ -25,7 +25,43 @@ const GameBoard = () => {
       if (conflict.length <= 0) {
         conflict = board.filter(field => {
           return (
-            field.x === pos.x && field.y === pos.y && field.hasShip === true
+            // check the field itself
+            (field.x === pos.x &&
+              field.y === pos.y &&
+              field.hasShip === true) ||
+            // check the field to the right
+            (field.x === pos.x + 1 &&
+              field.y === pos.y &&
+              field.hasShip === true) ||
+            // check the field to the left
+            (field.x === pos.x - 1 &&
+              field.y === pos.y &&
+              field.hasShip === true) ||
+            // check the field below
+            (field.x === pos.x &&
+              field.y === pos.y + 1 &&
+              field.hasShip === true) ||
+            // check the field above
+            (field.x === pos.x &&
+              field.y === pos.y - 1 &&
+              field.hasShip === true) ||
+            // check the fields diagonally:
+            // right + below
+            (field.x === pos.x + 1 &&
+              field.y === pos.y + 1 &&
+              field.hasShip === true) ||
+            // right + above
+            (field.x === pos.x + 1 &&
+              field.y === pos.y - 1 &&
+              field.hasShip === true) ||
+            // left + above
+            (field.x === pos.x - 1 &&
+              field.y === pos.y - 1 &&
+              field.hasShip === true) ||
+            // left + below
+            (field.x === pos.x - 1 &&
+              field.y === pos.y + 1 &&
+              field.hasShip === true)
           );
         });
       }

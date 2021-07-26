@@ -154,7 +154,7 @@ describe('placing ships on the board', () => {
     expect(expected).toEqual(false);
   });
 
-  test('there must be one field between ships', () => {
+  test('there must be one field between ships, below', () => {
     let board = GameBoard();
     board.placeShip([
       [1, 1],
@@ -167,7 +167,96 @@ describe('placing ships on the board', () => {
     expect(expected).toEqual(false);
   });
 
-  test('ships cannot touch diagonally', () => {});
+  test('there must be one field between ships, above', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [3, 3],
+      [4, 3]
+    ]);
+    let expected = board.placeShip([
+      [2, 2],
+      [3, 2]
+    ]);
+    expect(expected).toEqual(false);
+  });
+
+  test('there must be one field between ships, left', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [3, 3],
+      [4, 3]
+    ]);
+    let expected = board.placeShip([
+      [1, 3],
+      [2, 3]
+    ]);
+    expect(expected).toEqual(false);
+  });
+
+  test('there must be one field between ships, right', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [3, 3],
+      [4, 3]
+    ]);
+    let expected = board.placeShip([
+      [5, 3],
+      [5, 4]
+    ]);
+    expect(expected).toEqual(false);
+  });
+
+  test('ships cannot touch diagonally, right and below', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [1, 1],
+      [2, 1]
+    ]);
+    let expected = board.placeShip([
+      [3, 2],
+      [3, 3]
+    ]);
+    expect(expected).toEqual(false);
+  });
+
+  test('ships cannot touch diagonally, left and below', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [3, 3],
+      [4, 3]
+    ]);
+    let expected = board.placeShip([
+      [2, 4],
+      [2, 5]
+    ]);
+    expect(expected).toEqual(false);
+  });
+
+  test('ships cannot touch diagonally, left and above', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [3, 3],
+      [4, 3]
+    ]);
+    let expected = board.placeShip([
+      [2, 1],
+      [2, 2]
+    ]);
+    expect(expected).toEqual(false);
+  });
+
+  test('ships cannot touch diagonally, right and above', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [3, 3],
+      [4, 3]
+    ]);
+    let expected = board.placeShip([
+      [5, 1],
+      [5, 2]
+    ]);
+    expect(expected).toEqual(false);
+  });
 });
 
 describe('the gamebaord itself', () => {
