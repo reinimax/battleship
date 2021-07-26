@@ -18,6 +18,44 @@ describe('placing ships on the board', () => {
     );
   });
 
+  test('can place a longer single ship', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [1, 1],
+      [4, 1]
+    ]);
+    actual = board.getBoard().filter(field => field.hasShip === true);
+    expected = [
+      {
+        x: 1,
+        y: 1,
+        hasShip: true,
+        isHit: false
+      },
+      {
+        x: 2,
+        y: 1,
+        hasShip: true,
+        isHit: false
+      },
+      {
+        x: 3,
+        y: 1,
+        hasShip: true,
+        isHit: false
+      },
+      {
+        x: 4,
+        y: 1,
+        hasShip: true,
+        isHit: false
+      }
+    ];
+    expect(JSON.parse(JSON.stringify(actual))).toEqual(
+      JSON.parse(JSON.stringify(expected))
+    );
+  });
+
   test('can place a single ship vertically', () => {
     let board = GameBoard();
     board.placeShip([
@@ -102,6 +140,34 @@ describe('placing ships on the board', () => {
       JSON.parse(JSON.stringify(expected))
     );
   });
+
+  test('cannot place longer ships on top of each other', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [1, 2],
+      [4, 2]
+    ]);
+    expected = board.placeShip([
+      [2, 1],
+      [2, 3]
+    ]);
+    expect(expected).toEqual(false);
+  });
+
+  test('there must be one field between ships', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [1, 1],
+      [2, 1]
+    ]);
+    let expected = board.placeShip([
+      [1, 2],
+      [2, 2]
+    ]);
+    expect(expected).toEqual(false);
+  });
+
+  test('ships cannot touch diagonally', () => {});
 });
 
 describe('the gamebaord itself', () => {
@@ -152,9 +218,6 @@ describe('handling attacks', () => {
 });
 
 // tbd
-test('does not allow attacking a field outside the board', () => {});
-test('there must be one field between ships', () => {});
-test('ships cannot touch diagonally', () => {});
 test('gameboard distinguishes between hit and miss', () => {});
 test('gameboard reports when a ship is sunk', () => {});
 test('gameboard reports when all ships are sunk', () => {});

@@ -17,16 +17,15 @@ const GameBoard = () => {
   }
 
   function placeShip(coords) {
+    const ship = Ship(coords);
     // check for placing ships on top of each other
     let conflict = [];
-    coords.forEach(coordPair => {
+    ship.position.forEach(pos => {
       // skip execution if we already found a conflict
       if (conflict.length <= 0) {
         conflict = board.filter(field => {
           return (
-            field.x === coordPair[0] &&
-            field.y === coordPair[1] &&
-            field.hasShip === true
+            field.x === pos.x && field.y === pos.y && field.hasShip === true
           );
         });
       }
@@ -45,15 +44,16 @@ const GameBoard = () => {
     ) {
       return false;
     }
-    ships.push(Ship(coords));
     // place the coords on the board
-    coords.forEach(coordPair => {
+    ship.position.forEach(pos => {
       board.map(field => {
-        if (field.x === coordPair[0] && field.y === coordPair[1]) {
+        if (field.x === pos.x && field.y === pos.y) {
           field.hasShip = true;
         }
       });
     });
+    ships.push(ship);
+    return true;
   }
 
   function getBoard() {
