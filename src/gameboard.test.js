@@ -304,9 +304,68 @@ describe('handling attacks', () => {
       JSON.parse(JSON.stringify(expected))
     );
   });
-});
 
-// tbd
-test('gameboard distinguishes between hit and miss', () => {});
-test('gameboard reports when a ship is sunk', () => {});
-test('gameboard reports when all ships are sunk', () => {});
+  test('gameboard reports when a ship is sunk', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [1, 1],
+      [2, 1]
+    ]);
+    board.placeShip([
+      [6, 4],
+      [6, 5]
+    ]);
+    board.receiveAttack([1, 1]);
+    expected = { sunk: true, length: 2, remaining: 1 };
+    expect(board.receiveAttack([2, 1])).toEqual(expected);
+  });
+
+  test('gameboard reports not always that a ship is sunk', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [1, 1],
+      [2, 1]
+    ]);
+    expected = { sunk: false, length: 2, remaining: 1 };
+    expect(board.receiveAttack([1, 1])).toEqual(expected);
+  });
+
+  test('gameboard distinguishes between hit and miss', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [1, 1],
+      [2, 1]
+    ]);
+    expect(board.receiveAttack([3, 1])).toEqual(false);
+  });
+
+  test('gameboard reports when all ships are sunk', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [1, 1],
+      [2, 1]
+    ]);
+    board.receiveAttack([1, 1]);
+    expected = { sunk: true, length: 2, remaining: 0 };
+    expect(board.receiveAttack([2, 1])).toEqual(expected);
+  });
+
+  test('reporting when all ships are sunk works with multiple ships', () => {
+    let board = GameBoard();
+    board.placeShip([
+      [1, 1],
+      [2, 1]
+    ]);
+    board.placeShip([
+      [6, 4],
+      [6, 7]
+    ]);
+    board.receiveAttack([1, 1]);
+    board.receiveAttack([2, 1]);
+    board.receiveAttack([6, 4]);
+    board.receiveAttack([6, 5]);
+    board.receiveAttack([6, 6]);
+    expected = { sunk: true, length: 4, remaining: 0 };
+    expect(board.receiveAttack([6, 7])).toEqual(expected);
+  });
+});

@@ -97,17 +97,27 @@ const GameBoard = () => {
   }
 
   function receiveAttack(coords) {
+    let hitInfo = {};
     board.map(field => {
       if (field.x === coords[0] && field.y === coords[1]) {
         field.isHit = true;
         // if there is a ship on this field, invoke it's hit function
         if (field.hasShip) {
-          // we loop over all the ships, which is fine since it will hit only one with these coords.
-          // still, it would be nice to be able to reference a specific ship on the board.
-          ships.forEach(ship => ship.hit(coords));
+          // get the ship that was hit by filtering the ships array for a ship that contains the coordinates in its position array
+          ship = ships.filter(ship => {
+            return ship.position.some(pos => {
+              return pos.x === coords[0] && pos.y === coords[1];
+            });
+          })[0];
+          ship.hit(coords);
+          hitInfo.sunk = ship.sunk;
+          hitInfo.length = ship.length;
+          hitInfo.remaining = ships.filter(ship => ship.sunk === false).length;
         }
       }
     });
+    if (hitInfo.length > 0) return hitInfo;
+    return false;
   }
 
   return { ships, placeShip, getBoard, receiveAttack };
