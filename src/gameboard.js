@@ -2,6 +2,13 @@ const Ship = require('./ship');
 
 const GameBoard = () => {
   let ships = [];
+  let shipTypes = [
+    { type: 'Carrier', length: 5 },
+    { type: 'Battleship', length: 4 },
+    { type: 'Destroyer', length: 3 },
+    { type: 'Submarine', length: 3 },
+    { type: 'Patrol Boat', length: 2 }
+  ];
   let minCoords = 1;
   let maxCoords = 10;
   let board = [];
@@ -96,6 +103,40 @@ const GameBoard = () => {
     return board;
   }
 
+  function populateRandomly() {
+    shipTypes.forEach(ship => {
+      let success;
+      do {
+        // create two random numbers between 1 and 10. This will be our starting coordinate
+        let randStartX = Math.floor(Math.random() * 10) + 1;
+        let randStartY = Math.floor(Math.random() * 10) + 1;
+        let randStartCoord = [randStartX, randStartY];
+        // create another arbitrary number to choose between vertical and horizontal placement
+        // create our end coordinate: x or y will be the same, depending if vertically or horizontally arranged
+        // create the other coordinate by adding ship.length - 1 and the x or y coordinate
+        // check if the calculated number is greater than 10: if so, instead subtract ship.length + 1
+        let randEndCoord = [];
+        if (Math.random() < 0.5) {
+          // horizontal
+          let randEndX = randStartX + ship.length - 1;
+          if (randEndX > 10) randEndX = randStartX - ship.length + 1;
+          randEndCoord.push(randEndX);
+          randEndCoord.push(randStartY);
+        } else {
+          // vertical
+          let randEndY = randStartY + ship.length - 1;
+          if (randEndY > 10) randEndY = randStartY - ship.length + 1;
+          randEndCoord.push(randStartX);
+          randEndCoord.push(randEndY);
+        }
+        // place the ship
+        let finalCoords = [randStartCoord, randEndCoord];
+        success = placeShip(finalCoords);
+        // we need to try placing the ship until a valid position is found
+      } while (success !== true);
+    });
+  }
+
   function receiveAttack(coords) {
     let hitInfo = {};
     board.map(field => {
@@ -120,7 +161,7 @@ const GameBoard = () => {
     return false;
   }
 
-  return { ships, placeShip, getBoard, receiveAttack };
+  return { ships, placeShip, getBoard, receiveAttack, populateRandomly };
 };
 
 module.exports = GameBoard;

@@ -263,6 +263,12 @@ describe('the gamebaord itself', () => {
   test('is a 10x10 grid', () => {
     expect(GameBoard().getBoard().length).toBe(100);
   });
+
+  test('can populate the gameboard randomly', () => {
+    let board = GameBoard();
+    board.populateRandomly();
+    expect(board.ships.length).toBe(5);
+  });
 });
 
 describe('handling attacks', () => {
