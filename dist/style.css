@@ -1,0 +1,38 @@
+/* Making everything border-box */
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.main-wrapper {
+  display: flex;
+  justify-content: space-around;
+  padding: 100px;
+  background-color: rgb(221, 243, 255);
+}
+
+.player1Board,
+.player2Board {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 500px;
+  width: 500px;
+}
+
+.player1Board > div,
+.player2Board > div {
+  width: 50px;
+  height: 50px;
+  border: 1px solid rgb(50, 33, 143);
+  background-color: aqua;
+}
+
+.player1Board > div.hasShip {
+  background-color: rgb(128, 136, 136);
+}
