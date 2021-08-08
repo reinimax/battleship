@@ -36,3 +36,13 @@ html {
 .player1Board > div.hasShip {
   background-color: rgb(128, 136, 136);
 }
+
+.player1Board > div.isHit,
+.player2Board > div.isHit {
+  background-color: rgb(201, 138, 45);
+}
+
+.player1Board > div.isHit.hasShip,
+.player2Board > div.isHit.hasShip {
+  background-color: rgb(247, 6, 6);
+}
