@@ -140,14 +140,14 @@ const GameBoard = () => {
   function receiveAttack(coords) {
     let hitInfo = {};
     board.map(field => {
-      if (field.x === coords[0] && field.y === coords[1]) {
+      if (field.x == coords[0] && field.y == coords[1]) {
         field.isHit = true;
         // if there is a ship on this field, invoke it's hit function
         if (field.hasShip) {
           // get the ship that was hit by filtering the ships array for a ship that contains the coordinates in its position array
-          ship = ships.filter(ship => {
+          const ship = ships.filter(ship => {
             return ship.position.some(pos => {
-              return pos.x === coords[0] && pos.y === coords[1];
+              return pos.x == coords[0] && pos.y == coords[1];
             });
           })[0];
           ship.hit(coords);
