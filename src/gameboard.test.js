@@ -374,4 +374,14 @@ describe('handling attacks', () => {
     expected = { sunk: true, length: 4, remaining: 0 };
     expect(board.receiveAttack([6, 7])).toEqual(expected);
   });
+
+  test('field that was targeted the first time is a valid target', () => {
+    expect(GameBoard().isValidTarget([6, 7])).toEqual(true);
+  });
+
+  test('field that was targeted already is an invalid target', () => {
+    let board = GameBoard();
+    board.receiveAttack([6, 6]);
+    expect(board.isValidTarget([6, 6])).toEqual(false);
+  });
 });

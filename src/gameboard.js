@@ -161,7 +161,23 @@ const GameBoard = () => {
     return false;
   }
 
-  return { ships, placeShip, getBoard, receiveAttack, populateRandomly };
+  /** Returns true if the targeted field was not hit before, otherwise false */
+  function isValidTarget(coords) {
+    return board.some(field => {
+      return (
+        field.x == coords[0] && field.y == coords[1] && field.isHit === false
+      );
+    });
+  }
+
+  return {
+    ships,
+    placeShip,
+    getBoard,
+    receiveAttack,
+    populateRandomly,
+    isValidTarget
+  };
 };
 
 module.exports = GameBoard;
