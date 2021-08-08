@@ -37,8 +37,8 @@ const Ship = coords => {
   }
 
   function hit(coords) {
-    position.forEach(pos => {
-      if (pos.x === coords[0] && pos.y === coords[1]) {
+    this.position.forEach(pos => {
+      if (pos.x == coords[0] && pos.y == coords[1]) {
         pos.hit = true;
       }
     });
