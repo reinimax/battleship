@@ -22,9 +22,78 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
   }
 
   /** Helper that pushes coords into the excluded array. First the coords are checked if they are valid coordinates */
-  function exclude(coords) {
-    if (coords[0] <= 10 && coords[0] > 0 && coords[1] <= 10 && coords[1] > 0) {
-      excluded.push(coords);
+  function exclude(obj) {
+    let coordsX = obj.coordsX;
+    let coordsY = obj.coordsY;
+    // if the ship is horizontal
+    if (coordsX.length > 1) {
+      // push above and below
+      coordsX.forEach(x => {
+        let above = coordsY[0] - 1;
+        let below = coordsY[0] + 1;
+        if (above <= 10 && above > 0) excluded.push([x, above]);
+        if (below <= 10 && below > 0) excluded.push([x, below]);
+      });
+      // push the sides, including diagonal fields
+      let start = Math.min(...coordsX) - 1;
+      let end = Math.max(...coordsX) + 1;
+      if (
+        coordsY[0] - 1 <= 10 &&
+        coordsY[0] - 1 > 0 &&
+        start <= 10 &&
+        start > 0
+      )
+        excluded.push([start, coordsY[0] - 1]);
+      if (
+        coordsY[0] + 1 <= 10 &&
+        coordsY[0] + 1 > 0 &&
+        start <= 10 &&
+        start > 0
+      )
+        excluded.push([start, coordsY[0] + 1]);
+      if (coordsY[0] <= 10 && coordsY[0] > 0 && start <= 10 && start > 0)
+        excluded.push([start, coordsY[0]]);
+      if (coordsY[0] - 1 <= 10 && coordsY[0] - 1 > 0 && end <= 10 && end > 0)
+        excluded.push([end, coordsY[0] - 1]);
+      if (coordsY[0] + 1 <= 10 && coordsY[0] + 1 > 0 && end <= 10 && end > 0)
+        excluded.push([end, coordsY[0] + 1]);
+      if (coordsY[0] <= 10 && coordsY[0] > 0 && end <= 10 && end > 0)
+        excluded.push([end, coordsY[0]]);
+    }
+    // if the ship is vertical
+    else if (coordsY.length > 1) {
+      // push above and below
+      coordsY.forEach(y => {
+        let left = coordsX[0] - 1;
+        let right = coordsX[0] + 1;
+        if (left <= 10 && left > 0) excluded.push([left, y]);
+        if (right <= 10 && right > 0) excluded.push([right, y]);
+      });
+      // push the sides, including diagonal fields
+      let start = Math.min(...coordsY) - 1;
+      let end = Math.max(...coordsY) + 1;
+      if (
+        coordsX[0] - 1 <= 10 &&
+        coordsX[0] - 1 > 0 &&
+        start <= 10 &&
+        start > 0
+      )
+        excluded.push([coordsX[0] - 1, start]);
+      if (
+        coordsX[0] + 1 <= 10 &&
+        coordsX[0] + 1 > 0 &&
+        start <= 10 &&
+        start > 0
+      )
+        excluded.push([coordsX[0] + 1, start]);
+      if (coordsX[0] <= 10 && coordsX[0] > 0 && start <= 10 && start > 0)
+        excluded.push([coordsX[0], start]);
+      if (coordsX[0] - 1 <= 10 && coordsX[0] - 1 > 0 && end <= 10 && end > 0)
+        excluded.push([coordsX[0] - 1, end]);
+      if (coordsX[0] + 1 <= 10 && coordsX[0] + 1 > 0 && end <= 10 && end > 0)
+        excluded.push([coordsX[0] + 1, end]);
+      if (coordsX[0] <= 10 && coordsX[0] > 0 && end <= 10 && end > 0)
+        excluded.push([coordsX[0], end]);
     }
   }
 
@@ -44,14 +113,6 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
           result = target([left, y]);
           if (result.length > 0) {
             successfullyHit.coordsX.push(left);
-            // diagonal coords
-            exclude([left - 1, y - 1]);
-            exclude([left - 1, y + 1]);
-            exclude([left + 1, y - 1]);
-            exclude([left + 1, y + 1]);
-            // coords above and below
-            exclude([left, y - 1]);
-            exclude([left, y + 1]);
           }
         } else if (
           enemyGameboard.isValidTarget([right, y]) &&
@@ -60,14 +121,6 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
           result = target([right, y]);
           if (result.length > 0) {
             successfullyHit.coordsX.push(right);
-            // diagonal coords
-            exclude([right - 1, y - 1]);
-            exclude([right - 1, y + 1]);
-            exclude([right + 1, y - 1]);
-            exclude([right + 1, y + 1]);
-            // coords above and below
-            exclude([right, y - 1]);
-            exclude([right, y + 1]);
           }
         } else if (
           enemyGameboard.isValidTarget([x, above]) &&
@@ -76,14 +129,6 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
           result = target([x, above]);
           if (result.length > 0) {
             successfullyHit.coordsY.push(above);
-            // diagonal coords
-            exclude([x - 1, above - 1]);
-            exclude([x - 1, above + 1]);
-            exclude([x + 1, above - 1]);
-            exclude([x + 1, above + 1]);
-            // coords above and below
-            exclude([x - 1, above]);
-            exclude([x + 1, above]);
           }
         } else if (
           enemyGameboard.isValidTarget([x, below]) &&
@@ -92,18 +137,11 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
           result = target([x, below]);
           if (result.length > 0) {
             successfullyHit.coordsY.push(below);
-            // diagonal coords
-            exclude([x - 1, below - 1]);
-            exclude([x - 1, below + 1]);
-            exclude([x + 1, below - 1]);
-            exclude([x + 1, below + 1]);
-            // coords above and below
-            exclude([x - 1, below]);
-            exclude([x + 1, below]);
           }
         }
         // now, check if the ship was sunk. if so, reset successfullyHit
         if (result.sunk === true) {
+          exclude(successfullyHit);
           successfullyHit = {};
         }
       } else {
@@ -116,11 +154,6 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
         if (result.length > 0) {
           successfullyHit.coordsX = [x];
           successfullyHit.coordsY = [y];
-          // exclude diagonal fields
-          exclude([x - 1, y - 1]);
-          exclude([x - 1, y + 1]);
-          exclude([x + 1, y - 1]);
-          exclude([x + 1, y + 1]);
         }
       }
       console.log(excluded);
