@@ -3,22 +3,45 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
   /** This object is used by the computer player to save information about a ship
    * that was successfully hit, enabling it, to make smarter guesses */
   let successfullyHit = {};
+
   /** This array will hold the coordinates that the computer player excludes,
    * e. g. neighbors of a field that contains a ship, since on such a field now ship
    * could be placed according to the rules */
   const excluded = [];
 
+  /** This array tracks the lengths of the remaining enemy ships. It is used to
+   * make the AI smarter by checking if the randomly chosen coordinate has enough
+   * free fields to contain a ship */
+  const enemyShipLengths = [2, 3, 3, 4, 5];
+
   function target(coords) {
     return enemyGameboard.receiveAttack(coords);
   }
 
-  /** Returns true if the coordinate is part of the exluded array */
+  /** Returns true if the coordinate is part of the excluded array */
   function isExcluded(coords) {
-    let result = excluded.some(
+    return excluded.some(
       coord => coord[0] == coords[0] && coord[1] == coords[1]
     );
-    console.log(result);
-    return result;
+  }
+
+  /** Returns true if the largest remaining ship may be placed on this
+   * coordinate (that means, there are enough fields in at least one direction,
+   * which have not been hit or excluded) */
+  function isPossiblePosition(coords) {
+    const longestShipLength = Math.max(...enemyShipLengths);
+    // check how many fields are valid to the left.
+    // if >= longestShipLength, return true
+    // else, remember the number of free fields to the left
+    // check how many fields are valid to the right
+    // if free fields to the left + fields to the right >= longestShipLength, return true
+    // check how many fields are valid above.
+    // if >= longestShipLength, return true
+    // else, remember the number of free fields above
+    // check how many fields are valid below
+    // if free fields above + below >= longestShipLength, return true
+    // return false;
+    return true; // return true until implemented, to not break the attack fn
   }
 
   /** Helper that pushes coords into the excluded array. First the coords are checked if they are valid coordinates */
@@ -142,6 +165,8 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
         // now, check if the ship was sunk. if so, reset successfullyHit
         if (result.sunk === true) {
           exclude(successfullyHit);
+          // remove length of the sunk ship
+          enemyShipLengths.splice(enemyShipLengths.indexOf(result.length), 1);
           successfullyHit = {};
         }
       } else {
@@ -149,14 +174,17 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
         do {
           x = Math.floor(Math.random() * 10 + 1);
           y = Math.floor(Math.random() * 10 + 1);
-        } while (!enemyGameboard.isValidTarget([x, y]) || isExcluded([x, y]));
+        } while (
+          !enemyGameboard.isValidTarget([x, y]) ||
+          isExcluded([x, y]) ||
+          !isPossiblePosition([x, y])
+        );
         result = target([x, y]);
         if (result.length > 0) {
           successfullyHit.coordsX = [x];
           successfullyHit.coordsY = [y];
         }
       }
-      console.log(excluded);
       return result;
     }
   }
