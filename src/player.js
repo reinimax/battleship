@@ -30,18 +30,66 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
    * which have not been hit or excluded) */
   function isPossiblePosition(coords) {
     const longestShipLength = Math.max(...enemyShipLengths);
+    /** counters start at 1, because the targeted field itself must be counted too
+     * (otherwise the function would check for 1 field more then the greatest ship length!) */
+    let counterHorizontal = 1;
+    let counterVertical = 1;
     // check how many fields are valid to the left.
+    for (let i = 1; i <= longestShipLength; i++) {
+      if (
+        enemyGameboard.isValidTarget([coords[0] - i, coords[1]]) &&
+        !isExcluded([coords[0] - i, coords[1]])
+      ) {
+        counterHorizontal++;
+      } else {
+        break;
+      }
+    }
     // if >= longestShipLength, return true
-    // else, remember the number of free fields to the left
-    // check how many fields are valid to the right
+    if (counterHorizontal >= longestShipLength) return true;
+
+    // check how many fields are valid to the right.
+    for (let i = 1; i <= longestShipLength; i++) {
+      if (
+        enemyGameboard.isValidTarget([coords[0] + i, coords[1]]) &&
+        !isExcluded([coords[0] + i, coords[1]])
+      ) {
+        counterHorizontal++;
+      } else {
+        break;
+      }
+    }
     // if free fields to the left + fields to the right >= longestShipLength, return true
+    if (counterHorizontal >= longestShipLength) return true;
+
     // check how many fields are valid above.
+    for (let i = 1; i <= longestShipLength; i++) {
+      if (
+        enemyGameboard.isValidTarget([coords[0], coords[1] - i]) &&
+        !isExcluded([coords[0], coords[1] - i])
+      ) {
+        counterVertical++;
+      } else {
+        break;
+      }
+    }
     // if >= longestShipLength, return true
-    // else, remember the number of free fields above
+    if (counterVertical >= longestShipLength) return true;
+
     // check how many fields are valid below
+    for (let i = 1; i <= longestShipLength; i++) {
+      if (
+        enemyGameboard.isValidTarget([coords[0], coords[1] + i]) &&
+        !isExcluded([coords[0], coords[1] + i])
+      ) {
+        counterVertical++;
+      } else {
+        break;
+      }
+    }
     // if free fields above + below >= longestShipLength, return true
-    // return false;
-    return true; // return true until implemented, to not break the attack fn
+    if (counterVertical >= longestShipLength) return true;
+    return false;
   }
 
   /** Helper that pushes coords into the excluded array. First the coords are checked if they are valid coordinates */
@@ -189,7 +237,7 @@ const Player = (playerGameboard, enemyGameboard, isHuman = true) => {
     }
   }
 
-  return { isHuman, active, target, attack };
+  return { isHuman, active, target, attack, isPossiblePosition, excluded };
 };
 
 module.exports = Player;
