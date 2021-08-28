@@ -10,3 +10,6 @@ However, in general I liked the TDD approach very much for two reasons:
 - It pushes you to think more about architecture and interface and encourages better code (to quote The Odin Project: "Test driven development encourages better program architecture because it encourages you to write Pure Functions." Again, easier said than done. I think my later functions in this project especially are kind of tightly coupled behemoths, which only occurred to me when I (unsuccessfully) tried to test them. Maybe I should have moved the whole AI part out of the player module into its own module and split it up way more to distinguish better between input/output and side effects. But hey, I'm here to learn, not to be perfect at the first try).
 
 One thing I'm unsure about is testing private stuff. In some cases I exported properties and methods that were meant to be private, simply to be able to test them. In some cases this was due to my struggles with testing the interface. In an ideal world, one should gauge the working of the private stuff by looking at the public output/side effects. On the other hand, there are cases, e.g. the AI, where it's really hard to see from the public interface if it's internal workings are 100% correct. I definitely want to peek in there to see if everything's running correctly.
+
+Assets:
+https://opengameart.org/content/space-ships-2-0

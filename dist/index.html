@@ -9,10 +9,31 @@
     <link href="style.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="main-wrapper">
-      <div class="player1Board"></div>
-      <div class="player2Board"></div>
-    </div>
+    <div class="main-wrapper"></div>
+    <div id="carrier" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <div id="test" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
     <script src="main.js"></script>
+    <script>
+      // TODO this works only here - but it should work in modules with eventlistener
+      // where do i listen? best im game module because i also need logic.
+      // drag and drop example
+      function allowDrop(ev) {
+        // here must come the logic of assessing if the ship can be placed,
+        // depending on coordinates and if it is horizontal or vertical
+        ev.preventDefault();
+      }
+
+      function drag(ev) {
+        ev.dataTransfer.setData('text', ev.target.id);
+      }
+
+      function drop(ev) {
+        ev.preventDefault();
+        let data = ev.dataTransfer.getData('text');
+        ev.target.appendChild(document.getElementById(data));
+        // here some logic needs to be called to populate the actual gameboard object!
+      }
+      // END drag and drop example
+    </script>
   </body>
 </html>

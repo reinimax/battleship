@@ -31,6 +31,7 @@ html {
   height: 50px;
   border: 1px solid rgb(50, 33, 143);
   background-color: aqua;
+  overflow: visible;
 }
 
 .player1Board > div.hasShip {
@@ -45,4 +46,30 @@ html {
 .player1Board > div.isHit.hasShip,
 .player2Board > div.isHit.hasShip {
   background-color: rgb(247, 6, 6);
+}
+
+#carrier {
+  height: 50px;
+  width: 50px;
+  overflow: visible;
+  padding-left: 10px;
+  background-color: cadetblue;
+}
+
+#carrier > img,
+#test > img,
+div > img {
+  max-height: 50px;
+}
+
+#test {
+  height: 50px;
+  width: 50px;
+  overflow: visible;
+  padding-left: 15px;
+  background-color: rgb(161, 138, 143);
+}
+
+div > img {
+  background-color: cadetblue;
 }
