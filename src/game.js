@@ -26,7 +26,6 @@ document.querySelector('.player2Board').addEventListener('click', e => {
   // only execute if the player didn't already click on this field
   if (boardPlayer2.isValidTarget([x, y])) {
     let player1Result = boardPlayer2.receiveAttack([x, y]);
-    console.log(player1Result);
     if (player1Result.sunk === true) console.log('enemy ship sunk!');
     if (player1Result.remaining == 0) console.log('congratz, you won');
     // render gameboard again
